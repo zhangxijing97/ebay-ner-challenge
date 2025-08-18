@@ -20,31 +20,19 @@ The goal of the competition is to extract structured product aspects from German
 Suppose in *Car Engine Timing Kits* we evaluate two aspects:
 
 - **Hersteller**: Precision = 0.90, Recall = 0.80  
+  - F0.2 = (1.04 * 0.90 * 0.80) / (0.04 * 0.90 + 0.80) = 0.7488 / 0.836 = **0.90**  
+  - F1 = (2 * 0.90 * 0.80) / (0.90 + 0.80) = 1.44 / 1.70 = **0.85**
+
 - **Produktart**: Precision = 0.70, Recall = 0.60  
-
-We use \(F_\beta\) with \(\beta=0.2\) (precision-heavy):
-\[
-F_\beta=\frac{(1+\beta^2)\,P\,R}{\beta^2 P + R},\quad \beta=0.2 \Rightarrow \beta^2=0.04
-\]
-(For reference, \(F_1=\frac{2PR}{P+R}\).)
-
-**Hersteller**
-- \(F_{0.2}=\frac{1.04\times 0.90\times 0.80}{0.04\times 0.90+0.80}
-=\frac{0.7488}{0.836}\approx \mathbf{0.896}\)
-- \(F_{1}=\frac{2\times 0.90\times 0.80}{0.90+0.80}
-=\frac{1.44}{1.70}\approx \mathbf{0.847}\)
-
-**Produktart**
-- \(F_{0.2}=\frac{1.04\times 0.70\times 0.60}{0.04\times 0.70+0.60}
-=\frac{0.4368}{0.628}\approx \mathbf{0.696}\)
-- \(F_{1}=\frac{2\times 0.70\times 0.60}{0.70+0.60}
-=\frac{0.84}{1.30}\approx \mathbf{0.646}\)
+  - F0.2 = (1.04 * 0.70 * 0.60) / (0.04 * 0.70 + 0.60) = 0.4368 / 0.628 = **0.70**  
+  - F1 = (2 * 0.70 * 0.60) / (0.70 + 0.60) = 0.84 / 1.30 = **0.65**
 
 If **Hersteller** appears **twice as often** as **Produktart**, the **category-level score** (weighted by aspect frequency) is:
-- \(F_{0.2,\text{cat}}=\frac{0.896\times 2 + 0.696\times 1}{3}\approx \mathbf{0.829}\)
-- \(F_{1,\text{cat}}=\frac{0.847\times 2 + 0.646\times 1}{3}\approx \mathbf{0.780}\)
 
-Do the same for *Car Brake Component Kits*, then the **final leaderboard score** is the **average of the two category-level \(F_{0.2}\)** scores.
+- F0.2 = (0.90 * 2 + 0.70 * 1) / 3 = (1.80 + 0.70) / 3 = **0.83**  
+- F1 = (0.85 * 2 + 0.65 * 1) / 3 = (1.70 + 0.65) / 3 = **0.78**
+
+Do the same for *Car Brake Component Kits*, then the **final leaderboard score** is the **average of the two category-level F0.2 scores**.
 
 ## Experiment Log
 
