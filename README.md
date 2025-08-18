@@ -20,11 +20,11 @@ The goal of the competition is to extract structured product aspects from German
 Suppose in *Car Engine Timing Kits* we evaluate two aspects:
 
 **Hersteller**: Precision = 0.90, Recall = 0.80  
-- F0.2 = (1.04 * 0.90 * 0.80) / (0.04 * 0.90 + 0.80) = 0.7488 / 0.836 = **0.90**  
+- F0.2 = (（1 + 0.2^2） * 0.90 * 0.80) / (0.2^2 * 0.90 + 0.80) = (1.04 * 0.90 * 0.80) / (0.04 * 0.90 + 0.80) = 0.7488 / 0.836 = **0.90**  
 - F1 = (2 * 0.90 * 0.80) / (0.90 + 0.80) = 1.44 / 1.70 = **0.85**
 
 **Produktart**: Precision = 0.70, Recall = 0.60  
-- F0.2 = (1.04 * 0.70 * 0.60) / (0.04 * 0.70 + 0.60) = 0.4368 / 0.628 = **0.70**  
+- F0.2 = (（1 + 0.2^2） * 0.90 * 0.80) / (0.2^2 * 0.70 + 0.60) = (1.04 * 0.70 * 0.60) / (0.04 * 0.70 + 0.60) = 0.4368 / 0.628 = **0.70**  
 - F1 = (2 * 0.70 * 0.60) / (0.70 + 0.60) = 0.84 / 1.30 = **0.65**
 
 If **Hersteller** appears **twice as often** as **Produktart**, the **category-level score** (weighted by aspect frequency) is:
