@@ -1,0 +1,47 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# OS / Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Data files
+*.tsv
+*.tsv.gz
+*.csv
+*.json
+*.zip
+*.tar
+*.tar.gz
+
+# Model files / large artifacts
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.joblib
+*.pkl
+
+# Logs
+*.log
+logs/
+runs/
+
+# Notebook auto saves
+*.bak
+*.tmp
