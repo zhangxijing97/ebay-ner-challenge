@@ -1,0 +1,13 @@
+# requirements.txt
+
+# 基础
+numpy
+pandas
+scikit-learn
+
+# HuggingFace - 只取向量（用到 tokenizer + encoder）
+transformers
+torch     # transformers 内部需要，取出 last_hidden_state
+
+# 存取 parquet 数据
+pyarrow
