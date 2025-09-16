@@ -40,3 +40,41 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 - **Approach**: Fine-tuned transformer (e.g., BERT) on 5k training set.  
 - **Changes**: Added BIO tagging scheme for NER.  
 - **Result**: TBD  
+
+### DNN
+
+#### 1. Forward Pass  
+Input layer:  
+`z1 = w11 * x1 + w21 * x2 + b1`  
+`h1 = ReLU(z1)`  
+
+`z2 = w12 * x1 + w22 * x2 + b2`  
+`h2 = ReLU(z2)`  
+
+Output layer (sigmoid activation):  
+`z_out = v1 * h1 + v2 * h2 + b_out`  
+`ŷ = 1 / (1 + exp(-z_out))`  
+
+#### 2. Loss Function (Binary Cross-Entropy)  
+`Loss = - ( y * log(ŷ) + (1 - y) * log(1 - ŷ) )`  
+
+#### 3. Backward Pass + Gradient Descent  
+Each parameter θ (weights and biases) is updated as:  
+
+`θ = θ - α * ∂Loss / ∂θ`  
+
+Examples:  
+- `w11 = w11 - α * ∂Loss / ∂w11`  
+- `w21 = w21 - α * ∂Loss / ∂w21`  
+- `v1 = v1 - α * ∂Loss / ∂v1`  
+- `b_out = b_out - α * ∂Loss / ∂b_out`  
+
+####  Summary
+1. Forward Pass → compute prediction `ŷ`  
+2. Loss → measure difference between prediction and true label `y`  
+3. Backward Pass → compute gradients  
+4. Gradient Descent → update all weights and biases to reduce loss  
+
+### BiLSTM
+
+### BiLSTM
