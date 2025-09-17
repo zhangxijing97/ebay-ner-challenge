@@ -136,6 +136,15 @@ Examples:
 
 #### ✅ Example (Sequence [1,2,3] → Predict [2,3,4])  
 
+- **Initialization**
+  - Inputs: `x = [1, 2, 3]`
+  - Initial hidden state: `h0 = 0`
+  - Parameters: `W_x = 0.6`, `W_h = 0.5`, `W_y = 1.0`, `b = 0`, `c = 0`
+  - Update/Output rules:
+    - `a_t = W_x * x_t + W_h * h_{t-1} + b`
+    - `h_t = tanh(a_t)`
+    - `y_t = W_y * h_t + c`
+
 - **Step-by-step (initial forward pass)**  
 
   - t=1:  
@@ -173,4 +182,14 @@ Examples:
 
 👉 RNN gradually learned the sequence rule (`next number = +1`) by **remembering past inputs via hidden states**.
 
-### BiLSTM
+####  RNN Parameters Cheat Sheet
+
+| Parameter | Controls | ↑ Increase | ↓ Decrease |
+|-----------|----------|------------|------------|
+| **W_x** (input weights) | Impact of current input `x_t` | Focus more on current input | Rely more on past state |
+| **W_h** (recurrent weights) | Impact of past state `h_{t-1}` | Stronger memory, long-term context | Weaker memory, short-term focus (like DNN) |
+| **W_y** (output weights) | Map hidden state `h_t` → output `y_t` | Stronger, sharper outputs | Softer, less confident outputs |
+| **b** (hidden bias) | Hidden state baseline | Easier to activate | Harder to activate |
+| **c** (output bias) | Output baseline | Outputs shift higher | Outputs shift lower |
+
+### Long Short-Term Memory (LSTM)
