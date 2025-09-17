@@ -41,7 +41,7 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 - **Changes**: Added BIO tagging scheme for NER.  
 - **Result**: TBD  
 
-### DNN
+### Deep Neural Network (DNN)
 
 #### 1. Forward Pass  
 Input layer:  
@@ -75,6 +75,84 @@ Examples:
 3. Backward Pass → compute gradients  
 4. Gradient Descent → update all weights and biases to reduce loss  
 
-### BiLSTM
+### Recurrent Neural Network (RNN)
+
+#### 1. Forward Pass  
+At each time step `t`, the RNN takes the current input `x_t` and the previous hidden state `h_{t-1}`:  
+
+Hidden state update:  
+`a_t = W_x * x_t + W_h * h_{t-1} + b`  
+
+- `x_t` → the input at step t (e.g., the current word or number)  
+- `W_x` → weight matrix that scales the current input  
+- `h_{t-1}` → hidden state from the previous time step (the "memory")  
+- `W_h` → weight matrix that controls how much past memory influences the current step  
+- `b` → bias term, shifts the result  
+
+Activation:  
+`h_t = tanh(a_t)`  
+
+- `tanh()` → squashes values into (-1, 1), introduces nonlinearity, and keeps hidden state stable  
+- `h_t` → updated hidden state (combines current input and past context)  
+
+Output at time t:  
+`y_t = W_y * h_t + c`  
+
+- `W_y` → weight mapping hidden state to output  
+- `c` → output bias  
+- `y_t` → model’s prediction at step t  
+
+👉 Key difference from DNN:  
+- DNN only looks at input `x`  
+- RNN uses both `x_t` and the memory `h_{t-1}`, so it can "remember" context from earlier steps.  
+
+#### 2. Loss Function (Sequence MSE example)  
+For a sequence of length T, with target outputs `y*_t`:  
+
+`Loss = Σ ( 0.5 * (y_t - y*_t)^2 )` for `t = 1...T`
+
+#### 3. Backward Pass (Backpropagation Through Time, BPTT)  
+- Compute gradient at each step t:  
+  `δa_t = (∂Loss/∂y_t * W_y + δa_{t+1} * W_h) * (1 - h_t^2)`  
+
+- Use these to calculate parameter gradients:  
+  - `∇W_x = Σ δa_t * x_t`  
+  - `∇W_h = Σ δa_t * h_{t-1}`  
+  - `∇W_y = Σ h_t * (y_t - y*_t)`  
+  - `∇b  = Σ δa_t`  
+  - `∇c  = Σ (y_t - y*_t)`  
+
+#### 4. Gradient Descent Updates  
+Each parameter θ (weights and biases) is updated as:  
+
+`θ = θ - α * ∂Loss / ∂θ`  
+
+Examples:  
+- `W_x = W_x - α * ∇W_x`  
+- `W_h = W_h - α * ∇W_h`  
+- `W_y = W_y - α * ∇W_y`  
+- `b   = b   - α * ∇b`  
+- `c   = c   - α * ∇c`  
+
+#### ✅ Example (Sequence [1,2,3] → Predict [2,3,4])  
+- Initial predictions: `[0.54, 0.90, 0.98]` (far from targets)  
+- After 1 update: `[1.86, 2.19, 2.22]` (loss dropped from **7.84 → 1.93**)  
+- After 10 updates: `[2.12, 3.13, 3.44]` (loss ≈ **0.17**)  
+
+| Epoch | Predictions (y1, y2, y3)      | Loss   |
+|-------|-------------------------------|--------|
+| 0     | [0.54, 0.90, 0.98]            | 7.84   |
+| 1     | [1.86, 2.19, 2.22]            | 1.93   |
+| 2     | [1.95, 2.63, 2.71]            | 0.95   |
+| 3     | [2.05, 2.85, 3.00]            | 0.52   |
+| 4     | [2.08, 2.98, 3.18]            | 0.36   |
+| 5     | [2.12, 3.06, 3.28]            | 0.27   |
+| 6     | [2.16, 3.11, 3.35]            | 0.22   |
+| 7     | [2.19, 3.14, 3.39]            | 0.19   |
+| 8     | [2.23, 3.12, 3.32]            | 0.26   |
+| 9     | [2.16, 3.12, 3.38]            | 0.21   |
+| 10    | [2.12, 3.13, 3.44]            | 0.17   |
+
+👉 RNN gradually learned the sequence rule (`next number = +1`) by **remembering past inputs via hidden states**.
 
 ### BiLSTM
