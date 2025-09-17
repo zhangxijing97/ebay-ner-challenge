@@ -135,6 +135,24 @@ Examples:
 - `c   = c   - α * ∇c`  
 
 #### ✅ Example (Sequence [1,2,3] → Predict [2,3,4])  
+
+- **Step-by-step (initial forward pass)**  
+
+  - t=1:  
+    `a1 = W_x * x1 + W_h * h0 + b = 0.6*1 + 0.5*0 + 0 = 0.6`  
+    `h1 = tanh(a1) = tanh(0.6) ≈ 0.537`  
+    `y1 = W_y * h1 + c = 1.0*0.537 + 0 = 0.537 ≈ 0.54`  
+
+  - t=2:  
+    `a2 = W_x * x2 + W_h * h1 + b = 0.6*2 + 0.5*0.537 + 0 = 1.4685`  
+    `h2 = tanh(a2) = tanh(1.4685) ≈ 0.899`  
+    `y2 = W_y * h2 + c = 1.0*0.899 + 0 = 0.899 ≈ 0.90`  
+
+  - t=3:  
+    `a3 = W_x * x3 + W_h * h2 + b = 0.6*3 + 0.5*0.899 + 0 = 2.2497`  
+    `h3 = tanh(a3) = tanh(2.2497) ≈ 0.978`  
+    `y3 = W_y * h3 + c = 1.0*0.978 + 0 = 0.978 ≈ 0.98`  
+
 - Initial predictions: `[0.54, 0.90, 0.98]` (far from targets)  
 - After 1 update: `[1.86, 2.19, 2.22]` (loss dropped from **7.84 → 1.93**)  
 - After 10 updates: `[2.12, 3.13, 3.44]` (loss ≈ **0.17**)  
