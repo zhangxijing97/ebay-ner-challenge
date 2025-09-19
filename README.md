@@ -229,14 +229,10 @@ At each time step `t`, the LSTM takes the current input `x_t`, the previous shor
   - `C_t` → new long-term memory  
   - `h_t` → new short-term memory / hidden state  
 
----
-
 #### 2. Loss Function (Sequence Example with MSE)  
 For a sequence of length T, with targets `y*_t`:  
 
 `Loss = Σ (0.5 * (y_t - y*_t)^2)` for `t = 1...T`
-
----
 
 #### 3. Backward Pass (Backpropagation Through Time with Gates)  
 - Compute gradients through each gate:  
@@ -244,8 +240,6 @@ For a sequence of length T, with targets `y*_t`:
 - Update parameters:  
   - `∇W_f, ∇W_i, ∇W_o, ∇W_C`  
   - `∇b_f, ∇b_i, ∇b_o, ∇b_C`  
-
----
 
 #### 4. Gradient Descent Updates  
 Each parameter θ is updated as:  
@@ -258,8 +252,6 @@ Examples:
 - `W_C = W_C - α * ∇W_C`  
 - `W_o = W_o - α * ∇W_o`  
 - Biases updated similarly: `b_f, b_i, b_C, b_o`  
-
----
 
 #### ✅ Example (Tiny Walkthrough)  
 Suppose:  
@@ -275,8 +267,6 @@ Suppose:
 - Output Gate: `h_t = o_t * tanh(C_t)` → produces new short-term memory  
 
 👉 Result: LSTM preserves old memory (because Forget Gate is high) but also integrates new input.  
-
----
 
 #### LSTM Parameters Cheat Sheet  
 
