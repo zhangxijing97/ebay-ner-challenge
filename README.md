@@ -50,7 +50,7 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 - **Final score** = average of the two category scores.
 
 ### EXP-001 — Baseline BiLSTM
-Notebook: [Colab](https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link)  
+Colab: <https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link>
 Date: 2025-09-26 (PT)  
 Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, no dropout)`  
 Train: `Adam(lr=1e-3)`, `CE(ignore PAD)`, epochs=50, bs=32, no clipping/scheduler/seed  
@@ -59,3 +59,35 @@ Split: train/val = 90%/10%
 Best: **Epoch 37**  
 - final_F1 **0.8725**, final_F0.2 **0.8773**  
 - c1_F1 **0.9007**, c2_F1 **0.8444**
+
+### EXP-002 — BiLSTM GradClip Sweep (one experiment)
+Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>
+Date: 2025-09-26 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, dropout=0.0)`  
+Train: `Adam(lr=1e-3)`, `CrossEntropy(ignore PAD)`, **epochs=50**, **bs=32**, **fixed seed**, no scheduler  
+Split: train/val = 90%/10%  
+Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
+
+**Best-per-variant (by final_F1)**
+
+| grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
+|---:|---:|---:|---:|---:|---:|:--|
+| 0.25 | 33 | **0.8741** | 0.8787 | 0.8936 | 0.8546 | `bilstm_gc0.25.pt` |
+| 0.5  | 21 | **0.8758** | 0.8835 | 0.9049 | 0.8466 | `bilstm_gc0.5.pt`  |
+| 1.0  | 19 | **0.8727** | 0.8774 | 0.9015 | 0.8439 | `bilstm_gc1.0.pt`  |
+| 2.0  | 37 | **0.8807** | 0.8874 | 0.9004 | **0.8610** | `bilstm_gc2.0.pt` |
+| 5.0  | 9  | **0.8775** | 0.8853 | 0.9042 | 0.8508 | `bilstm_gc5.0.pt`  |
+
+**Overall winner:** `grad_clip_norm=2.0` → final_F1 **0.8807** (best overall) with the strongest category-2 score (c2_F1 **0.8610**).
+
+#### Notes
+- Very small clipping (0.25) stabilizes early recall (F0.2) but caps overall F1 later.
+- Very large clipping (5.0) can boost early recall but shows more late-epoch variance.
+- Mild overfitting emerges after ~epoch 25–30 across several settings (loss ↓ while F1 fluctuates).
+
+#### Next micro-step (keep everything else the same)
+- Start from **grad_clip_norm=2.0**; add **dropout=0.3** after the LSTM output (before the FC).  
+- Run `layers=1, dropout=0.3`. If helpful, try `layers=2, dropout=0.3`.  
+- Goal: lift **c2_F1** and smooth late-epoch fluctuations.
+
+Artifacts: `bilstm_gc0.25.pt`, `bilstm_gc0.5.pt`, `bilstm_gc1.0.pt`, `bilstm_gc2.0.pt`, `bilstm_gc5.0.pt`
