@@ -80,25 +80,17 @@ Train: `Adam(lr=1e-3)`, `CrossEntropy(ignore PAD)`, **epochs=50**, **bs=32**, **
 Split: train/val = 90%/10%  
 Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 
-### EXP-002 — BiLSTM GradClip Sweep (one experiment)
-Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>  
-Date: 2025-09-26 (PT)  
-Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, dropout=0.0)`  
-Train: `Adam(lr=1e-3)`, `CrossEntropy(ignore PAD)`, **epochs=50**, **bs=32**, **fixed seed**, no scheduler  
-Split: train/val = 90%/10%  
-Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
-
-**Best-per-variant (by final_F0.2 across 3 runs)**
+**Best-per-variant (by final_F0.2)**
 
 | grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
 |---:|---:|---:|---:|---:|---:|:--|
-| 0.25 | 10 | 0.8812 | **0.8906** | 0.9046 | 0.8577 | `bilstm_gc0.25.pt` |
-| 0.5  | 36 | 0.8806 | **0.8862** | 0.9000 | 0.8611 | `bilstm_gc0.5.pt`  |
-| 1.0  | 46 | 0.8771 | **0.8820** | 0.9021 | 0.8521 | `bilstm_gc1.0.pt`  |
-| 2.0  | 37 | 0.8807 | **0.8874** | 0.9004 | 0.8610 | `bilstm_gc2.0.pt` |
-| 5.0  | 17 | 0.8803 | **0.8876** | 0.9078 | 0.8528 | `bilstm_gc5.0.pt`  |
+| 0.25 | 33 | 0.8741 | 0.8787 | 0.8936 | 0.8546 | `bilstm_gc0.25.pt` |
+| 0.5  | 21 | 0.8758 | 0.8835 | 0.9049 | 0.8466 | `bilstm_gc0.5.pt`  |
+| 1.0  | 19 | 0.8727 | 0.8774 | 0.9015 | 0.8439 | `bilstm_gc1.0.pt`  |
+| 2.0  | 37 | 0.8807 | 0.8874 | 0.9004 | 0.8610 | `bilstm_gc2.0.pt` |
+| 5.0  | 9  | 0.8775 | 0.8853 | 0.9042 | 0.8508 | `bilstm_gc5.0.pt`  |
 
-**Overall winner (by final_F0.2):** `grad_clip_norm=0.25` → final_F0.2 **0.8906** (run #3), with strong early-epoch stability.
+**Overall winner:** `grad_clip_norm=2.0` → final_F0.2 **0.8874** (best overall)
 
 **Repeat run #2**
 
@@ -110,6 +102,8 @@ Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 | 2.0  | 41 | 0.8699 | 0.8753 | 0.9075 | 0.8323 | `bilstm_gc2.0.pt` |
 | 5.0  | 46 | 0.8767 | 0.8811 | 0.9000 | 0.8534 | `bilstm_gc5.0.pt`  |
 
+**Overall winner:** `grad_clip_norm=0.25` → final_F0.2 **0.8825** (best overall)
+
 **Repeat run #3**
 
 | grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
@@ -120,11 +114,11 @@ Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 | 2.0  | 11 | 0.8768 | 0.8850 | 0.9005 | 0.8532 | `bilstm_gc2.0.pt` |
 | 5.0  | 17 | 0.8803 | 0.8876 | 0.9078 | 0.8528 | `bilstm_gc5.0.pt`  |
 
+**Overall winner:** `grad_clip_norm=0.25` → final_F0.2 **0.8906** (best overall)
+
 #### Notes
 - Using **final_F0.2** favors settings that maintain higher recall at stricter precision weighting; under this lens, **0.25** and **5.0** often shine early, while **2.0** remains a solid all-rounder.
 - Late-epoch variance still appears at larger clips; early stopping by **final_F0.2** could be beneficial.
-
-**Overall winner:** `grad_clip_norm=2.0` → final_F1 **0.8807** (best overall) with the strongest category-2 score (c2_F1 **0.8610**).
 
 #### Notes
 - Very small clipping (0.25) stabilizes early recall (F0.2) but caps overall F1 later.
