@@ -37,6 +37,18 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 ## Experiment Log
 
 ### How our F1 / F0.2 are computed
+
+Colab: <https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link>  
+
+**Implementation detail**: The full evaluation logic is implemented inside  
+```python
+def evaluate_logits(model, data_loader, device, tag2idx, beta_for_final=0.2):
+```
+
+> **Note**: The evaluation method described below is **not identical to the official competition scoring**.  
+> As a result, the absolute F1/F0.2 values we obtain may differ from leaderboard scores.  
+> However, this method provides a **consistent and reliable way to compare models** during experiments, so that we can roughly judge which setups perform better or worse.
+
 - We turn tags into **entities** per sequence: keep the first tag of a run (non-`O`), and treat later repeats as “continuation” (`""`). Then we join its tokens into one entity string.
 - We count entities **per (record, category, aspect)** using a Counter for **gold** and **pred**.
 - For each (record, category, aspect):
@@ -50,7 +62,7 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 - **Final score** = average of the two category scores.
 
 ### EXP-001 — Baseline BiLSTM
-Colab: <https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link>
+Colab: <https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link>  
 Date: 2025-09-26 (PT)  
 Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, no dropout)`  
 Train: `Adam(lr=1e-3)`, `CE(ignore PAD)`, epochs=50, bs=32, no clipping/scheduler/seed  
@@ -61,22 +73,56 @@ Best: **Epoch 37**
 - c1_F1 **0.9007**, c2_F1 **0.8444**
 
 ### EXP-002 — BiLSTM GradClip Sweep (one experiment)
-Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>
+Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>  
 Date: 2025-09-26 (PT)  
 Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, dropout=0.0)`  
 Train: `Adam(lr=1e-3)`, `CrossEntropy(ignore PAD)`, **epochs=50**, **bs=32**, **fixed seed**, no scheduler  
 Split: train/val = 90%/10%  
 Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 
-**Best-per-variant (by final_F1)**
+### EXP-002 — BiLSTM GradClip Sweep (one experiment)
+Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>  
+Date: 2025-09-26 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, dropout=0.0)`  
+Train: `Adam(lr=1e-3)`, `CrossEntropy(ignore PAD)`, **epochs=50**, **bs=32**, **fixed seed**, no scheduler  
+Split: train/val = 90%/10%  
+Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
+
+**Best-per-variant (by final_F0.2 across 3 runs)**
 
 | grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
 |---:|---:|---:|---:|---:|---:|:--|
-| 0.25 | 33 | **0.8741** | 0.8787 | 0.8936 | 0.8546 | `bilstm_gc0.25.pt` |
-| 0.5  | 21 | **0.8758** | 0.8835 | 0.9049 | 0.8466 | `bilstm_gc0.5.pt`  |
-| 1.0  | 19 | **0.8727** | 0.8774 | 0.9015 | 0.8439 | `bilstm_gc1.0.pt`  |
-| 2.0  | 37 | **0.8807** | 0.8874 | 0.9004 | **0.8610** | `bilstm_gc2.0.pt` |
-| 5.0  | 9  | **0.8775** | 0.8853 | 0.9042 | 0.8508 | `bilstm_gc5.0.pt`  |
+| 0.25 | 10 | 0.8812 | **0.8906** | 0.9046 | 0.8577 | `bilstm_gc0.25.pt` |
+| 0.5  | 36 | 0.8806 | **0.8862** | 0.9000 | 0.8611 | `bilstm_gc0.5.pt`  |
+| 1.0  | 46 | 0.8771 | **0.8820** | 0.9021 | 0.8521 | `bilstm_gc1.0.pt`  |
+| 2.0  | 37 | 0.8807 | **0.8874** | 0.9004 | 0.8610 | `bilstm_gc2.0.pt` |
+| 5.0  | 17 | 0.8803 | **0.8876** | 0.9078 | 0.8528 | `bilstm_gc5.0.pt`  |
+
+**Overall winner (by final_F0.2):** `grad_clip_norm=0.25` → final_F0.2 **0.8906** (run #3), with strong early-epoch stability.
+
+**Repeat run #2**
+
+| grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
+|---:|---:|---:|---:|---:|---:|:--|
+| 0.25 | 46 | 0.8799 | 0.8825 | 0.9048 | 0.8551 | `bilstm_gc0.25.pt` |
+| 0.5  | 40 | 0.8710 | 0.8774 | 0.8944 | 0.8475 | `bilstm_gc0.5.pt`  |
+| 1.0  | 50 | 0.8755 | 0.8770 | 0.9048 | 0.8461 | `bilstm_gc1.0.pt`  |
+| 2.0  | 41 | 0.8699 | 0.8753 | 0.9075 | 0.8323 | `bilstm_gc2.0.pt` |
+| 5.0  | 46 | 0.8767 | 0.8811 | 0.9000 | 0.8534 | `bilstm_gc5.0.pt`  |
+
+**Repeat run #3**
+
+| grad_clip_norm | best_epoch | final_F1 | final_F0.2 | c1_F1 | c2_F1 | checkpoint |
+|---:|---:|---:|---:|---:|---:|:--|
+| 0.25 | 10 | 0.8812 | 0.8906 | 0.9046 | 0.8577 | `bilstm_gc0.25.pt` |
+| 0.5  | 36 | 0.8806 | 0.8862 | 0.9000 | 0.8611 | `bilstm_gc0.5.pt`  |
+| 1.0  | 46 | 0.8771 | 0.8820 | 0.9021 | 0.8521 | `bilstm_gc1.0.pt`  |
+| 2.0  | 11 | 0.8768 | 0.8850 | 0.9005 | 0.8532 | `bilstm_gc2.0.pt` |
+| 5.0  | 17 | 0.8803 | 0.8876 | 0.9078 | 0.8528 | `bilstm_gc5.0.pt`  |
+
+#### Notes
+- Using **final_F0.2** favors settings that maintain higher recall at stricter precision weighting; under this lens, **0.25** and **5.0** often shine early, while **2.0** remains a solid all-rounder.
+- Late-epoch variance still appears at larger clips; early stopping by **final_F0.2** could be beneficial.
 
 **Overall winner:** `grad_clip_norm=2.0` → final_F1 **0.8807** (best overall) with the strongest category-2 score (c2_F1 **0.8610**).
 
@@ -89,5 +135,3 @@ Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 - Start from **grad_clip_norm=2.0**; add **dropout=0.3** after the LSTM output (before the FC).  
 - Run `layers=1, dropout=0.3`. If helpful, try `layers=2, dropout=0.3`.  
 - Goal: lift **c2_F1** and smooth late-epoch fluctuations.
-
-Artifacts: `bilstm_gc0.25.pt`, `bilstm_gc0.5.pt`, `bilstm_gc1.0.pt`, `bilstm_gc2.0.pt`, `bilstm_gc5.0.pt`
