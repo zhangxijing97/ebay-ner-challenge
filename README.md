@@ -36,7 +36,26 @@ Do the same for *Car Brake Component Kits*, then the **final leaderboard score**
 
 ## Experiment Log
 
-### Version 1
-- **Approach**: Fine-tuned transformer (e.g., BERT) on 5k training set.  
-- **Changes**: Added BIO tagging scheme for NER.  
-- **Result**: TBD  
+### How our F1 / F0.2 are computed
+- We turn tags into **entities** per sequence: keep the first tag of a run (non-`O`), and treat later repeats as “continuation” (`""`). Then we join its tokens into one entity string.
+- We count entities **per (record, category, aspect)** using a Counter for **gold** and **pred**.
+- For each (record, category, aspect):
+  - **TP** = overlap of gold vs pred counts (per value, use min)
+  - **FP** = predicted counts − overlap
+  - **FN** = gold counts − overlap
+- **Precision** = TP/(TP+FP), **Recall** = TP/(TP+FN)
+- **F1** (β=1): `(1+1^2)*P*R/(1^2*P+R) = 2PR/(P+R)`
+- **F0.2** (β=0.2): `(1+β²)PR/(β²P+R)` → puts **more weight on Precision** than Recall
+- **Category score** = weighted average of aspect F-scores (weights = gold entity counts for that aspect).
+- **Final score** = average of the two category scores.
+
+### EXP-001 — Baseline BiLSTM
+Notebook: [Colab](https://colab.research.google.com/drive/1-QZhYnF119t9eI9yRigq4q2MY8T8hfOP?usp=drive_link)  
+Date: 2025-09-26 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, no dropout)`  
+Train: `Adam(lr=1e-3)`, `CE(ignore PAD)`, epochs=50, bs=32, no clipping/scheduler/seed  
+Split: train/val = 90%/10%
+
+Best: **Epoch 37**  
+- final_F1 **0.8725**, final_F0.2 **0.8773**  
+- c1_F1 **0.9007**, c2_F1 **0.8444**
