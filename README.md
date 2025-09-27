@@ -73,6 +73,8 @@ Best: **Epoch 37**
 - c1_F1 **0.9007**, c2_F1 **0.8444**
 
 ### EXP-002 — BiLSTM GradClip Sweep (one experiment)
+
+Gradient clipping: Limiting the gradient’s magnitude (e.g., its norm) to a preset threshold during backpropagation to prevent exploding gradients and stabilize training.  
 Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>  
 Date: 2025-09-26 (PT)  
 Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1, dropout=0.0)`  
@@ -120,12 +122,28 @@ Variants: `grad_clip_norm ∈ {0.25, 0.5, 1.0, 2.0, 5.0}`
 - Using **final_F0.2** favors settings that maintain higher recall at stricter precision weighting; under this lens, **0.25** and **5.0** often shine early, while **2.0** remains a solid all-rounder.
 - Late-epoch variance still appears at larger clips; early stopping by **final_F0.2** could be beneficial.
 
-#### Notes
-- Very small clipping (0.25) stabilizes early recall (F0.2) but caps overall F1 later.
-- Very large clipping (5.0) can boost early recall but shows more late-epoch variance.
-- Mild overfitting emerges after ~epoch 25–30 across several settings (loss ↓ while F1 fluctuates).
-
 #### Next micro-step (keep everything else the same)
 - Start from **grad_clip_norm=2.0**; add **dropout=0.3** after the LSTM output (before the FC).  
 - Run `layers=1, dropout=0.3`. If helpful, try `layers=2, dropout=0.3`.  
 - Goal: lift **c2_F1** and smooth late-epoch fluctuations.
+
+### EXP-003 — BiLSTM + GradClip + Dropout
+
+Lightweight regularization: Small, low-cost techniques (e.g., dropout, weight decay, early stopping) that gently constrain the model to reduce overfitting and improve generalization without architectural changes.  
+Colab: <https://colab.research.google.com/drive/1FQwhsm0mMxjFnu36A0pgrRllFaBRainb?usp=drive_link>  
+Date: 2025-09-26 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1)`  
+Train: Adam, CE, epochs=50, bs=32, gradient clipping  
+
+| Run  | Dropout | Clip | Best Ep | final_F1 | final_F0.2 | best_F1 | best_F0.2 |
+|:---:|:------:|:---:|:------:|:-------:|:---------:|:------:|:---------:|
+| 09 | 0.4 | 0.25 | **28** | 0.8934 | 0.8989 | 0.8972 | **0.9055** |
+| 11 | 0.4 | 1.0  | **26** | 0.8953 | 0.9005 | 0.8956 | **0.9033** |
+| 13 | 0.5 | 0.25 | **41** | 0.8902 | 0.8967 | 0.8973 | **0.9041** |
+| 14 | 0.5 | 0.5  | **49** | 0.8955 | 0.9023 | 0.8981 | **0.9039** |
+| 15 | 0.5 | 1.0  | **35** | 0.8946 | 0.8999 | 0.8988 | **0.9046** |
+
+- Smaller clip (0.25) + 0.4 dropout → faster convergence, stronger precision-weighted F0.2.
+- 0.5 dropout + clip 1.0 → later peak, best balanced F1.
+- clip 2.0 is generally weaker.
+- Category_2 is more sensitive and benefits from the later-peaking setup.
