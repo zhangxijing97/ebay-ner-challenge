@@ -162,3 +162,14 @@ Best (across trials): **[COARSE RUN 14]**
 
 Summary: Across multiple settings, `AdamW + weight decay + scheduler` **did not consistently beat** the baseline F0.2 (baseline best ≈ **0.9055**). Only the above single run performed notably well.  
 Decision: **Not adopted as mainline for now.** Continue with “BiLSTM + GradClip + Dropout”; revisit this route after testing (i) **no-decay for embeddings/bias** and (ii) **LR scheduling driven by F0.2**.
+
+### EXP-005 — BiLSTM + GradClip + Dropout + ClassWeights
+Colab: <https://colab.research.google.com/drive/1mnxyGpLG_viIaiUyQiPQwuvo7OuhPoq2?usp=sharing>  
+Date: 2025-09-28 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=2, dropout∈[0.35–0.55])`  
+Train: `Adam(lr=1e-3)`, `CE(ignore PAD, weight=class_weights; pow_k∈{0.3,0.5,0.7})`, `grad_clip∈[0.25–1.0]`, epochs≈40–50, bs=32  
+Split: 90%/10%
+
+**Observation:** Class weights improved recall but hurt precision; **F0.2 rarely reached 0.90**. c1 stayed strong; **c2 F0.2 remained < 0.90** even at best dropout/clip settings.
+
+**Decision:** **Not adopted.** Archive `BiLSTM_GradClip_Dropout_ClassWeights.ipynb`. Revert to non-weighted baseline and, if needed, try (i) class-specific threshold/temperature and (ii) shared encoder + per-category heads.
