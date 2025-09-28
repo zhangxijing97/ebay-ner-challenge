@@ -147,3 +147,18 @@ Train: Adam, CE, epochs=50, bs=32, gradient clipping
 - 0.5 dropout + clip 1.0 → later peak, best balanced F1.
 - clip 2.0 is generally weaker.
 - Category_2 is more sensitive and benefits from the later-peaking setup.
+
+### EXP-004 — BiLSTM + GradClip + Dropout + AdamW + Weight Decay
+Colab: <https://colab.research.google.com/drive/1ZGdPHmAt9doK_4WWM4SC9DicjbJ-QJkj?usp=drive_link>  
+Date: 2025-09-27 (PT)  
+Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=2, dropout∈{0.2–0.4})`  
+Train: `AdamW(lr∈{5e-4–1e-3})`, `CE(ignore PAD)`, `weight_decay∈{0.003–0.01}`, `grad_clip∈{0.25–1.0}`, `ReduceLROnPlateau`, epochs≈40–50, bs=32  
+Split: train/val = 90%/10%
+
+Best (across trials): **[COARSE RUN 14]**  
+- Config: `lr=0.001 | dropout=0.4 | clip=0.25 | weight_decay=0.005 | epochs=40`  
+- [Eval] c1_F0.2 **0.9278**, c1_F1 **0.9212**, c2_F0.2 **0.8949**, c2_F1 **0.8805**  
+- **final_F0.2 0.9114**, **final_F1 0.9008**
+
+Summary: Across multiple settings, `AdamW + weight decay + scheduler` **did not consistently beat** the baseline F0.2 (baseline best ≈ **0.9055**). Only the above single run performed notably well.  
+Decision: **Not adopted as mainline for now.** Continue with “BiLSTM + GradClip + Dropout”; revisit this route after testing (i) **no-decay for embeddings/bias** and (ii) **LR scheduling driven by F0.2**.
