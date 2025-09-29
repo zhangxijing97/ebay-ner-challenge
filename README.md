@@ -135,6 +135,11 @@ Date: 2025-09-26 (PT)
 Config: `BiLSTMWithCategory(emb=128, cat=10, hidden=256, layers=1)`  
 Train: Adam, CE, epochs=50, bs=32, gradient clipping  
 
+```
+DROPOUTS = [0.2, 0.3, 0.4, 0.5]
+CLIPS    = [0.25, 0.5, 1.0, 2.0]
+```
+
 | Run  | Dropout | Clip | Best Ep | final_F1 | final_F0.2 | best_F1 | best_F0.2 |
 |:---:|:------:|:---:|:------:|:-------:|:---------:|:------:|:---------:|
 | 09 | 0.4 | 0.25 | **28** | 0.8934 | 0.8989 | 0.8972 | **0.9055** |
@@ -173,3 +178,15 @@ Split: 90%/10%
 **Observation:** Class weights improved recall but hurt precision; **F0.2 rarely reached 0.90**. c1 stayed strong; **c2 F0.2 remained < 0.90** even at best dropout/clip settings.
 
 **Decision:** **Not adopted.** Archive `BiLSTM_GradClip_Dropout_ClassWeights.ipynb`. Revert to non-weighted baseline and, if needed, try (i) class-specific threshold/temperature and (ii) shared encoder + per-category heads.
+
+### EXP-006 — BiLSTM-CRF + Hyperparameter Tuning
+Colab: <https://colab.research.google.com/drive/1MHEgi4aLojPxcLztva1mJAKgcuRDdNTN?usp=drive_link>  
+Date: 2025-09-28 (PT)
+Config: `BiLSTM_CRF(embedding_dim=128, hidden_dim=256, cat_dim=20, layers=1, dropout=0.4)`
+Train: `Adam(lr=5e-4)`, `CRF Loss`, epochs=100 (early stopping, patience=10), batch_size=32, grad_clip_norm=1.0
+Split: train/val = 90%/10%
+
+Best run result:
+- final_F1 **0.8985**, final_F0.2 **0.9109** (🏆🏆🏆 NEW OVERALL BEST SCORE FOUND! 🏆🏆🏆)
+- c1_F0.2 **0.9330**, c2_F0.2 **0.8888**
+- c1_F1 **0.9234**, c2_F1 **0.8736**
