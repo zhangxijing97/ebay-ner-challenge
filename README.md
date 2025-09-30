@@ -72,7 +72,7 @@ Best: **Epoch 37**
 - final_F1 **0.8725**, final_F0.2 **0.8773**  
 - c1_F1 **0.9007**, c2_F1 **0.8444**
 
-### EXP-002 — BiLSTM GradClip Sweep (one experiment)
+### EXP-002 — BiLSTM GradClip Sweep
 
 Gradient clipping: Limiting the gradient’s magnitude (e.g., its norm) to a preset threshold during backpropagation to prevent exploding gradients and stabilize training.  
 Colab: <https://colab.research.google.com/drive/12Y2OvUpeR2HB3PuwF6qw8c03itXj3Kaj?usp=drive_link>  
@@ -218,7 +218,7 @@ FastText provides **pre-trained word vectors** that include **subword informatio
 - 🚀 FastText embeddings improved F0.2 from 0.9109 → **0.9143**.  
 - Hidden_dim=768 + dropout=0.5 gave best generalization.  
 
-### EXP-008 — BERT-CRFused
+### EXP-008 — BERT-CRF
 Colab: <https://colab.research.google.com/drive/1TCUuKTHpKiWMeRnxMXwYUgBNpkAtCc7x?usp=sharing>  
 Date: 2025-09-29 (PT)
 
