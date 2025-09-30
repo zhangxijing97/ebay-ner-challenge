@@ -195,6 +195,12 @@ Best run result:
 Colab: <https://colab.research.google.com/drive/1ZiWVDhBVA0pm7wtosEhlFo-YKN9aQRva?usp=drive_link>  
 Date: 2025-09-29 (PT)
 
+**Intro (Why FastText):**  
+FastText provides **pre-trained word vectors** that include **subword information** (character n-grams).  
+- Helps recognize **rare / compound words** (e.g., *“Scheinwerferglas”*) even if unseen in training.  
+- Transfers **semantic knowledge** from a large corpus into the NER model.  
+- Fine-tuning keeps vectors flexible for domain-specific adaptation.  
+
 **Config:**  
 - `BiLSTM_CRF(emb=300, hidden=768, cat=10, layers=1, dropout=0.5)`  
 - Embeddings: FastText (German, 300d, fine-tuned)  
