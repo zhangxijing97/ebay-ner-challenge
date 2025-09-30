@@ -190,3 +190,24 @@ Best run result:
 - final_F1 **0.8985**, final_F0.2 **0.9109** (🏆🏆🏆 NEW OVERALL BEST SCORE FOUND! 🏆🏆🏆)
 - c1_F0.2 **0.9330**, c2_F0.2 **0.8888**
 - c1_F1 **0.9234**, c2_F1 **0.8736**
+
+### EXP-007 — BiLSTM-CRF + FastText Embeddings  
+Colab: <https://colab.research.google.com/drive/1ZiWVDhBVA0pm7wtosEhlFo-YKN9aQRva?usp=drive_link>  
+Date: 2025-09-29 (PT)
+
+**Config:**  
+- `BiLSTM_CRF(emb=300, hidden=768, cat=10, layers=1, dropout=0.5)`  
+- Embeddings: FastText (German, 300d, fine-tuned)  
+- Train: `Adam(lr=5e-4)`, CRF Loss, epochs=100 (early stop=10), bs=32, grad_clip=1.0  
+- Split: 90%/10%
+
+**Best Run (Trial 29/36):**  
+- final_F0.2: **0.9143**  
+- final_F1: 0.9088  
+- c1_F0.2: 0.9326 | c2_F0.2: 0.8959  
+- c1_F1: 0.9280 | c2_F1: 0.8896  
+
+**Notes:**  
+- ✅ Grid search 36/36 complete.  
+- 🚀 FastText embeddings improved F0.2 from 0.9109 → **0.9143**.  
+- Hidden_dim=768 + dropout=0.5 gave best generalization.  
