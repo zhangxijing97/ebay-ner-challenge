@@ -217,3 +217,31 @@ FastText provides **pre-trained word vectors** that include **subword informatio
 - ✅ Grid search 36/36 complete.  
 - 🚀 FastText embeddings improved F0.2 from 0.9109 → **0.9143**.  
 - Hidden_dim=768 + dropout=0.5 gave best generalization.  
+
+### EXP-008 — BERT-CRFused
+Colab: <https://colab.research.google.com/drive/1TCUuKTHpKiWMeRnxMXwYUgBNpkAtCc7x?usp=sharing>  
+Date: 2025-09-29 (PT)
+
+**Intro (Why BERT):**
+BERT (Bidirectional Encoder Representations from Transformers) provides dynamic, **contextualized word embeddings**, which is a paradigm shift from static vectors like FastText.
+- Unlike static vectors, BERT generates a word's representation based on its **surrounding context**, allowing it to disambiguate homonyms (e.g., "Bank" as a financial institution vs. a river bank).
+- The **Transformer architecture** uses a self-attention mechanism to capture complex, long-range dependencies within the entire title more effectively than sequential models like LSTMs.
+- As a deeply pre-trained **language model**, it transfers rich grammatical and syntactic knowledge, not just word-level semantics.
+
+**Config:**
+- Model: `BERT-CRF (base: dbmdz/bert-base-german-cased)`
+- Architecture: `BERT(768d) + Linear(cat=10, dropout=0.1) + CRF`
+- Embeddings: Handled internally by the BERT model (fine-tuned).
+- Train: `AdamW(lr=2e-5)`, CRF Loss, epochs=30 (early stop=5), bs=16, grad_clip=1.0
+- Split: 90%/10%
+
+**Best Run (Trial 3/8):**
+- final_F0.2: **0.9228**
+- final_F1: 0.9175
+- c1_F0.2: 0.9415 | c2_F0.2: 0.9041
+- c1_F1: 0.9379 | c2_F1: 0.8971
+
+**Notes:**
+- ✅ Grid search 8/8 complete.
+- 🚀 BERT-CRF improved F0.2 from 0.9143 → **0.9228**.
+- The low learning rate (`2e-5`) was critical for stable and effective fine-tuning of the large Transformer model.
