@@ -6,6 +6,20 @@ The goal of the competition is to extract structured product aspects from German
 - **Car Brake Component Kits**  
 - **Car Engine Timing Kits**
 
+## Submission
+```
+# Create venv
+conda create -n evalai39 python=3.9
+conda activate evalai39
+pip install evalai
+
+# Add your EvalAI account token to evalai-cli
+evalai set_token xxxxxx
+
+#  Make submission
+evalai challenge 2508 phase 4978 submit --file "/Users/zhangxijing/Downloads/submission_cleaned.tsv" --large
+```
+
 ## How the Final Score is Calculated
 1. For each **aspect name** inside a category:
    - Compute **Precision** = correct predictions / all predictions  
