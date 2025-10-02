@@ -267,4 +267,5 @@ Date: 2025-09-30 (PT)
 The "MASK" is used to enforce rules directly within the model by setting the prediction scores of non-compliant tags for a specific category to a large negative number, which fundamentally prevents the model from predicting illogical tag combinations.  
 Config: `BertCRF(base='dbmdz/bert-base-german-cased', cat_dim=10, dropout=0.1)` with category-based tag masking.  
 Train: `AdamW(lr=2e-5)`, `CRF NLL Loss`, epochs=30 (early stopping w/ patience=5), bs=16, `clip_grad=1.0`  
+- {"Averaged F\u03b2-score": 0.7429356420167956}
 
