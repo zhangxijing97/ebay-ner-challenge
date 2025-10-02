@@ -259,3 +259,12 @@ BERT (Bidirectional Encoder Representations from Transformers) provides dynamic,
 - ✅ Grid search 8/8 complete.
 - 🚀 BERT-CRF improved F0.2 from 0.9143 → **0.9228**.
 - The low learning rate (`2e-5`) was critical for stable and effective fine-tuning of the large Transformer model.
+
+### EXP-009 — BERT-CRF-MASK
+Colab: <https://colab.research.google.com/drive/1daosqyFCZcalskjRfootsvw8SLsthhAm?usp=sharing>  
+Date: 2025-09-30 (PT)
+
+The "MASK" is used to enforce rules directly within the model by setting the prediction scores of non-compliant tags for a specific category to a large negative number, which fundamentally prevents the model from predicting illogical tag combinations.  
+Config: `BertCRF(base='dbmdz/bert-base-german-cased', cat_dim=10, dropout=0.1)` with category-based tag masking.  
+Train: `AdamW(lr=2e-5)`, `CRF NLL Loss`, epochs=30 (early stopping w/ patience=5), bs=16, `clip_grad=1.0`  
+
