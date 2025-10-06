@@ -269,3 +269,32 @@ Config: `BertCRF(base='dbmdz/bert-base-german-cased', cat_dim=10, dropout=0.1)` 
 Train: `AdamW(lr=2e-5)`, `CRF NLL Loss`, epochs=30 (early stopping w/ patience=5), bs=16, `clip_grad=1.0`  
 - {"Averaged F\u03b2-score": 0.7429356420167956}
 
+### **EXP-009 — BERT-CRF with Category-Based Masking**
+**Colab:** <https://colab.research.google.com/drive/1daosqyFCZcalskjRfootsvw8SLsthhAm?usp=sharing>  
+**Date:** 2025-09-30 (PT)
+
+#### **Overview**
+This experiment investigates the integration of a **category-based masking mechanism** within the BERT-CRF architecture to enforce structural consistency in sequence labeling tasks.  
+The masking logic constrains invalid tag-category combinations by assigning them large negative logits prior to the CRF decoding step, thereby prohibiting semantically incoherent tag transitions.  
+This modification aims to enhance model robustness, improve entity boundary accuracy, and minimize logically inconsistent predictions.
+
+#### **Configuration**
+```python
+Model: BertCRF(
+    base='dbmdz/bert-base-german-cased',
+    cat_dim=10,
+    dropout=0.1,
+    mask_strategy='category-based'
+)
+```
+#### **Training Setup**
+- **Optimizer:** AdamW (`lr=2e-5`)  
+- **Loss Function:** CRF Negative Log-Likelihood (NLL)  
+- **Epochs:** 30 (with early stopping, patience = 5)  
+- **Batch Size:** 16  
+- **Gradient Clipping:** 1.0  
+
+#### **Results**
+| Metric | Value |
+|:-------|:------:|
+| Averaged F<sub>β</sub>-score | **0.7429** |
