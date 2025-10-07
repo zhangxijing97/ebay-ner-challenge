@@ -290,7 +290,7 @@ Model: BertCRF(
 |:-------|:------:|
 | Averaged F<sub>β</sub>-score | **0.7429** |
 
-### **EXP-010 — BERT-CRF (XLM-R Large) with Category Masking**
+### **EXP-010 — BERT-CRF (XLM-R Large)
 **Colab:** <https://colab.research.google.com/drive/1vIuGthp-M2wRZxFabzFDavNEcV2Xxi5J?usp=sharing>  
 **Date:** 2025-10-06 (PT)
 
