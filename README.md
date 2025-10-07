@@ -298,3 +298,34 @@ Model: BertCRF(
 | Metric | Value |
 |:-------|:------:|
 | Averaged F<sub>β</sub>-score | **0.7429** |
+
+### **EXP-010 — BERT-CRF (XLM-R Large) with Category Masking**
+**Colab:** <https://colab.research.google.com/drive/1vIuGthp-M2wRZxFabzFDavNEcV2Xxi5J?usp=sharing>  
+**Date:** 2025-10-06 (PT)
+
+#### **Overview**
+- Solve entity boundary judgment error
+- Replaces the BERT-German backbone with XLM-R Large
+
+#### **Config**
+```python
+Model: BertCRF(
+    base='xlm-roberta-large',
+    cat_dim=10,
+    dropout=0.1,
+    mask_strategy='category-based'
+)
+```
+
+#### **Training**
+- **Optimizer:** AdamW (`lr=2e-5`)  
+- **Loss Function:** CRF NLL  
+- **Epochs:** 30 (early stopping = 5)  
+- **Batch Size:** 16  
+- **Gradient Clipping:** 1.0  
+
+#### **Results**
+| Metric | Value |
+|:--|:--:|
+| **Best F₀.₂ (dev)** | **0.8755** |
+| **Final F₀.₂** | **0.8543** |
