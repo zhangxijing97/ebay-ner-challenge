@@ -1,4 +1,0 @@
-seed: 42
-
-paths:
-  train_tagged: "data/Tagged_Titles_Train.tsv"
