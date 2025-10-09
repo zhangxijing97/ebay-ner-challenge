@@ -320,3 +320,20 @@ Model: BertCRF(
 |:--|:--:|
 | **Best F₀.₂ (dev)** | **0.8755** |
 | **Final F₀.₂** | **0.8543** |
+
+### **EXP-011
+
+This table tracks the performance of various Transformer encoders tested for the NER task. The goal is to identify the best-performing and most diverse models for the final ensemble.
+
+| Model Name | Architecture | Strategy / Reason to Try | Validation F0.2 | Submission F0.2 | Notes |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **_Baseline_** |
+| `dbmdz/bert-base-german-cased` | BERT | The starting point for measuring all improvements. | | | |
+| **_Top Tier Upgrades_** |
+| `deepset/gbert-large` | RoBERTa-style | **The Gold Standard**: Widely considered the best-performing German model. | | | |
+| `deepset/gelectra-large` | ELECTRA | **The Efficient Challenger**: A different, highly efficient architecture that often excels at this task. | | | |
+| `dbmdz/bert-large-german-cased` | BERT | **The Direct Upgrade**: The same architecture as the baseline, but larger and more powerful. | | | |
+| **_Strategic Choices (for Ensemble Diversity)_** |
+| `xlm-roberta-large` | RoBERTa | **The Multilingual Powerhouse**: A massive model that provides a different "perspective," excellent for ensembling. | | | |
+| `microsoft/mdeberta-v3-base` | DeBERTa v3 | **The Modern & Fast Choice**: A newer, smarter architecture that is still fast to train (`base` size). | | | |
+| `oliverguhr/german-sentiment-bert`| BERT | **The Creative Transfer**: Pre-trained on sentiment, which might give it a unique understanding of descriptive words. | | | |
