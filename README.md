@@ -323,6 +323,24 @@ Model: BertCRF(
 
 ### **EXP-011: Model & Hyperparameter Performance Tracker**
 
+## 🧠 Model Selection Strategy
+
+The choice of models for this competition was not random but followed a structured strategy balancing **top-tier performance**, **architectural diversity**, and **creative exploration**. Each model was selected to play a specific role, either as a high-performing backbone or as a source of diverse perspectives for the final ensemble.
+
+| Model Name | Strategy Category | Detailed Rationale & Role in the Project |
+| :--- | :--- | :--- |
+| **_Baseline & Control_** |
+| `dbmdz/bert-base-german-cased` | **Baseline Control** | Establishes the initial performance benchmark. Every other model's success is measured against this starting point, justifying the need for more advanced architectures. |
+| **_SOTA Performance Models_** |
+| `deepset/gbert-large` | **Top-Tier Performance** | **Role: Primary Backbone.** This RoBERTa-style model is the community gold standard for German NLP. The strategy is to leverage the best publicly available model to push the performance ceiling as high as possible. |
+| `deepset/gelectra-large` | **Top-Tier Performance** | **Role: Primary Backbone.** The ELECTRA architecture is highly sample-efficient and excels at token-level tasks like NER. This model serves as a direct competitor to `gbert-large` to see which SOTA architecture is superior for this specific dataset. |
+| **_Strategic Diversity Models_** |
+| `xlm-roberta-large` | **Maximum Diversity** | **Role: Key Ensemble Contributor.** Trained on 100 languages, its understanding of German is influenced by cross-lingual patterns. This provides a fundamentally different "perspective" from German-only models, which is invaluable for correcting errors in an ensemble. |
+| `microsoft/mdeberta-v3-base` | **Architectural Diversity**| **Role: Modern & Efficient Contributor.** DeBERTa V3 is a newer, more advanced architecture. Using the `base` version is a strategic trade-off to gain architectural novelty and fast iteration speed, testing the hypothesis that a "smarter" architecture can compete with larger ones. |
+| **_Controlled & Creative Experiments_** |
+| `dbmdz/bert-large-german-cased` | **Controlled Experiment** | **Role: Analytical.** This isolates one variable: model size. Comparing it to the `bert-base` version reveals the performance gain attributable purely to scaling up the original BERT architecture, without other improvements. |
+| `oliverguhr/german-sentiment-bert`| **Creative Exploration** | **Role: Wildcard/Specialist.** This is a hypothesis-driven test. The idea is that a model fine-tuned on sentiment might better understand descriptive e-commerce language, providing a unique advantage in identifying certain entity types (e.g., `Besonderheiten`/Features). |
+
 This table tracks the performance of various Transformer encoders and their best-performing hyperparameter sets. The goal is to identify the highest-scoring and most diverse models for the final ensemble.
 
 | Model Name | Architecture | Hyperparameters (HP) | Validation F0.2 | Submission F0.2 | Notes |
