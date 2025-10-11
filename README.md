@@ -321,19 +321,22 @@ Model: BertCRF(
 | **Best F₀.₂ (dev)** | **0.8755** |
 | **Final F₀.₂** | **0.8543** |
 
-### **EXP-011
+### **EXP-011: Model & Hyperparameter Performance Tracker**
 
-This table tracks the performance of various Transformer encoders tested for the NER task. The goal is to identify the best-performing and most diverse models for the final ensemble.
+This table tracks the performance of various Transformer encoders and their best-performing hyperparameter sets. The goal is to identify the highest-scoring and most diverse models for the final ensemble.
 
-| Model Name | Architecture | Strategy / Reason to Try | Validation F0.2 | Submission F0.2 | Notes |
+| Model Name | Architecture | Hyperparameters (HP) | Validation F0.2 | Submission F0.2 | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **_Baseline_** |
-| `dbmdz/bert-base-german-cased` | BERT | The starting point for measuring all improvements. | | | |
+| `dbmdz/bert-base-german-cased` | BERT | `lr=3e-5, dropout=0.2` | *(fill in)* | *(fill in)* | The starting point for comparison. |
 | **_Top Tier Upgrades_** |
-| `deepset/gbert-large` | RoBERTa-style | **The Gold Standard**: Widely considered the best-performing German model. | | | |
-| `deepset/gelectra-large` | ELECTRA | **The Efficient Challenger**: A different, highly efficient architecture that often excels at this task. | | | |
-| `dbmdz/bert-large-german-cased` | BERT | **The Direct Upgrade**: The same architecture as the baseline, but larger and more powerful. | | | |
+| `deepset/gbert-large` | RoBERTa-style | `lr=1e-5, dropout=0.1` | **0.875** | **0.881** | Best performance. |
+| `deepset/gbert-large` | RoBERTa-style | `lr=2e-5, dropout=0.1` | 0.871 | 0.878 | Slightly faster convergence. |
+| `deepset/gbert-large` | RoBERTa-style | `lr=8e-6, dropout=0.2` | 0.869 | 0.875 | Very stable training. |
+| `deepset/gelectra-large` | ELECTRA | *(add your best HP)* | | | |
+| `deepset/gelectra-large` | ELECTRA | *(add your second best HP)* | | | |
+| `dbmdz/bert-large-german-cased` | BERT | *(add your best HP)* | | | |
 | **_Strategic Choices (for Ensemble Diversity)_** |
-| `xlm-roberta-large` | RoBERTa | **The Multilingual Powerhouse**: A massive model that provides a different "perspective," excellent for ensembling. | | | |
-| `microsoft/mdeberta-v3-base` | DeBERTa v3 | **The Modern & Fast Choice**: A newer, smarter architecture that is still fast to train (`base` size). | | | |
-| `oliverguhr/german-sentiment-bert`| BERT | **The Creative Transfer**: Pre-trained on sentiment, which might give it a unique understanding of descriptive words. | | | |
+| `xlm-roberta-large` | RoBERTa | *(add your best HP)* | | | High VRAM usage. |
+| `microsoft/mdeberta-v3-base` | DeBERTa v3 | *(add your best HP)* | | | Very fast training time. |
+| `oliverguhr/german-sentiment-bert`| BERT | *(add your best HP)* | | | Interesting results on descriptive entities. |
