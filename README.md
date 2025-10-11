@@ -339,10 +339,12 @@ Model: BertCRF(
 
 This table tracks the performance of various Transformer encoders and their best-performing hyperparameter sets. The goal is to identify the highest-scoring and most diverse models for the final ensemble.
 
+**bert-base-german-cased:** <https://colab.research.google.com/drive/1DR1EEHudSA3nDDunyyk0hFDjUJMRTnQ5?usp=sharing>  
+
 | Model Name | Architecture | Hyperparameters (HP) | Validation F0.2 | Submission F0.2 | Notes |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **_Baseline_** |
-| `dbmdz/bert-base-german-cased` | BERT | `lr=3e-5, dropout=0.2` | *(fill in)* | *(fill in)* | The starting point for comparison. |
+| `dbmdz/bert-base-german-cased` | BERT | `lr=3e-5, dropout=0.2` | 0.8571 | 0.8475 | The starting point for comparison. |
 | **_Top Tier Upgrades_** |
 | `deepset/gbert-large` | RoBERTa-style | `lr=1e-5, dropout=0.1` |  |  | Best performance. |
 | `deepset/gbert-large` | RoBERTa-style | `lr=2e-5, dropout=0.1` |  |  | Slightly faster convergence. |

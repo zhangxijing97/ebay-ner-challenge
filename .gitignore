@@ -21,7 +21,6 @@ Thumbs.db
 *.swo
 
 # Data files
-*.tsv
 *.tsv.gz
 *.csv
 *.json
@@ -45,3 +44,7 @@ runs/
 # Notebook auto saves
 *.bak
 *.tmp
+
+# Ignore specific data files
+data/**/*.tsv
+processed_data/**/*.tsv
