@@ -323,10 +323,6 @@ Model: BertCRF(
 
 ### **EXP-011: Model & Hyperparameter Performance Tracker**
 
-## 🧠 Model Selection Strategy
-
-The choice of models for this competition was not random but followed a structured strategy balancing **top-tier performance**, **architectural diversity**, and **creative exploration**. Each model was selected to play a specific role, either as a high-performing backbone or as a source of diverse perspectives for the final ensemble.
-
 | Model Name | Strategy Category | Detailed Rationale & Role in the Project |
 | :--- | :--- | :--- |
 | **_Baseline & Control_** |
@@ -348,9 +344,9 @@ This table tracks the performance of various Transformer encoders and their best
 | **_Baseline_** |
 | `dbmdz/bert-base-german-cased` | BERT | `lr=3e-5, dropout=0.2` | *(fill in)* | *(fill in)* | The starting point for comparison. |
 | **_Top Tier Upgrades_** |
-| `deepset/gbert-large` | RoBERTa-style | `lr=1e-5, dropout=0.1` | **0.875** | **0.881** | Best performance. |
-| `deepset/gbert-large` | RoBERTa-style | `lr=2e-5, dropout=0.1` | 0.871 | 0.878 | Slightly faster convergence. |
-| `deepset/gbert-large` | RoBERTa-style | `lr=8e-6, dropout=0.2` | 0.869 | 0.875 | Very stable training. |
+| `deepset/gbert-large` | RoBERTa-style | `lr=1e-5, dropout=0.1` |  |  | Best performance. |
+| `deepset/gbert-large` | RoBERTa-style | `lr=2e-5, dropout=0.1` |  |  | Slightly faster convergence. |
+| `deepset/gbert-large` | RoBERTa-style | `lr=8e-6, dropout=0.2` |  | | Very stable training. |
 | `deepset/gelectra-large` | ELECTRA | *(add your best HP)* | | | |
 | `deepset/gelectra-large` | ELECTRA | *(add your second best HP)* | | | |
 | `dbmdz/bert-large-german-cased` | BERT | *(add your best HP)* | | | |
